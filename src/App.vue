@@ -114,8 +114,6 @@ export default {
           for(var i in this.citiesList){
             var formattedString = this.citiesList[i].city_name.toLowerCase()
             if(formattedQuery == formattedString.trim()){
-              console.log(formattedQuery)
-              console.log(formattedString)
               this.fetchWeather(this.citiesList[i].lat,this.citiesList[i].lon)
               break
             }
