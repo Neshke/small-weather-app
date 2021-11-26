@@ -1,22 +1,31 @@
 <template>
-  <v-app class="blue">
+  <v-app >
     <v-main >
       <v-toolbar
-        color="#1565c0"
+        color="blue darken-2"
         dark
         flat
         >
-        <v-toolbar-title>Simple Weather</v-toolbar-title>
+        <v-toolbar-title >Simple Weather</v-toolbar-title>
+        <v-spacer ></v-spacer>
         <v-spacer></v-spacer>
-
+        <v-text-field
+          label="Enter city..."
+          hide-details="auto"
+          v-show="showInput"
+          width="100px"
+          v-model="query"
+          ></v-text-field>
+          <v-spacer ></v-spacer>
+          <v-btn light color="amber" v-show="showInput" small @click="searchCities(query)">Search</v-btn>
         <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
+          <v-icon @click="showInput = !showInput">mdi-magnify</v-icon>
         </v-btn> 
         <template v-slot:extension>
           <v-tabs
             v-model="model"
             left
-            slider-color="#f84b23"
+            slider-color="deep-orange accent-4"
             background-color="white"
             color="black"
             light
@@ -48,10 +57,11 @@
     </v-main>
   </v-app>
 </template>
-
 <script>
+
 import Daily from './components/Daily.vue';
 import Hourly from './components/Hourly.vue';
+import citiesList from './cities_20000.json'
 
 export default {
   components: { Hourly, Daily },
@@ -60,8 +70,10 @@ export default {
     api_key: '1f89da47fe4d0be6bbbf376af70bdb58',
     url_base: 'https://api.openweathermap.org/data/2.5/onecall',
     weather: {},
+    showInput:false,
     model: 'tab',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    citiesList,
+    query:'',
     cities:[
       {
         number:1,
@@ -84,21 +96,34 @@ export default {
     ],
   }),
   created(){
-    this.fetchWeather('-22.0','-42.5')
-    
+    this.fetchWeather('-22.0','-42.5'),
+    console.log(this.citiesList)
   },
   methods:{
-    async fetchWeather (lat,lon){
-      await fetch(`${this.url_base}?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${this.api_key}`)
-      .then(res =>{
-        return res.json();
-      }).then(this.setResults);
-    },
-    setResults (results){
-      this.weather = results;
-    },
+      async fetchWeather (lat,lon){
+        await fetch(`${this.url_base}?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${this.api_key}`)
+        .then(res =>{
+          return res.json();
+        }).then(this.setResults);
+      },
+      setResults (results){
+        this.weather = results;
+      },
+      searchCities(query){
+        for(var i in this.citiesList){
+          if(query.toLowerCase() === this.citiesList[i].city_name.toLowerCase()){
+            fetch(`${this.url_base}?lat=${this.citiesList[i].lat}&lon=${this.citiesList[i].lon}&units=metric&exclude=minutely&appid=${this.api_key}`)
+              .then(res =>{
+                return res.json();
+              }).then(this.setResults);
+          }
+        }
+      },
+      countryNameErrors(){
+
+      }
+    }
   }
-};
 </script>
 <style scoped>
 </style>

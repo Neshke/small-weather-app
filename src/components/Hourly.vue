@@ -1,10 +1,10 @@
 <template>
     <v-main>
-        <v-card height="40vh" class="ma-3 mb-6" >
+        <v-card  class="ma-3 mb-6" >
             <h1 class="display-1 pa-6" >Next Hours</h1>
 
             <v-sheet class="mx-0" max-width="100%" justify="center">
-              <v-slide-group v-model="model" light>
+              <v-slide-group v-model="model" :show-arrows="show" light>
                   <v-slide-item v-for="(n,k,i) in weatherData" touch :key="n"  >
                     <v-col>
                         <v-row >
@@ -69,6 +69,7 @@ export default {
     props:['weatherData'],
     data:() =>({
         model: 'tab',
+        show: false,
     }),
     methods:{
         dateHourlyFormatter (unixTime){
@@ -86,8 +87,9 @@ export default {
         },
         fun(test){
             console.log(test);
-        }
-    }
+        },
+        
+    },
 
 }
 </script>
