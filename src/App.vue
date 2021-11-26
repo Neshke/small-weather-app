@@ -17,7 +17,7 @@
           v-model="query"
           ></v-text-field>
           <v-spacer ></v-spacer>
-          <v-btn light color="amber" v-show="showInput" small @click="searchCities(query)">Search</v-btn>
+          <v-btn light color="amber" v-show="showInput" small @click="formValidation(query)">Search</v-btn>
         <v-btn icon>
           <v-icon @click="showInput = !showInput">mdi-magnify</v-icon>
         </v-btn> 
@@ -96,8 +96,7 @@ export default {
     ],
   }),
   created(){
-    this.fetchWeather('-22.0','-42.5'),
-    console.log(this.citiesList)
+    this.fetchWeather('-22.0','-42.5')
   },
   methods:{
       async fetchWeather (lat,lon){
@@ -109,18 +108,24 @@ export default {
       setResults (results){
         this.weather = results;
       },
-      searchCities(query){
-        for(var i in this.citiesList){
-          if(query.toLowerCase() === this.citiesList[i].city_name.toLowerCase()){
-            fetch(`${this.url_base}?lat=${this.citiesList[i].lat}&lon=${this.citiesList[i].lon}&units=metric&exclude=minutely&appid=${this.api_key}`)
-              .then(res =>{
-                return res.json();
-              }).then(this.setResults);
+      formValidation(query){
+          var formattedQuery = query.toLowerCase()
+          var counter=0
+          for(var i in this.citiesList){
+            var formattedString = this.citiesList[i].city_name.toLowerCase()
+            if(formattedQuery == formattedString.trim()){
+              console.log(formattedQuery)
+              console.log(formattedString)
+              this.fetchWeather(this.citiesList[i].lat,this.citiesList[i].lon)
+              break
+            }
+            else{
+              counter++
+            }
           }
-        }
-      },
-      countryNameErrors(){
-
+          if(counter == citiesList.length){
+          alert("City doesn't exist in data or is mistyped!")
+          }
       }
     }
   }
