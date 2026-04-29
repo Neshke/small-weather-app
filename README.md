@@ -1,24 +1,21 @@
 # small-weather-app
 
-## Project setup
-```
+A clean, simple weather application providing real-time forecasts using the OpenWeather API.
+
+---
+
+## Tech Stack
+
+- **Vue.js** — Frontend framework
+- **Vuetify** — UI component library
+- **OpenWeather API** — Weather data
+
+---
+
+## Development
+
+```bash
 npm install
+npm run serve   # development
+npm run build   # production
 ```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
